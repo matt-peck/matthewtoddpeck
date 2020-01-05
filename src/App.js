@@ -17,7 +17,9 @@ const ReadingListItem = props => {
 
 class App extends Component {
   async componentDidMount() {
-    const goals = await fetch("/.netlify/functions/getGoals");
+    const goals = await fetch("./.netlify/functions/getGoals").then(response =>
+      response.json()
+    );
     console.log({ goals });
   }
 
