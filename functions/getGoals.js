@@ -16,10 +16,15 @@ const fetchGoals = async () => {
     // referrerPolicy: 'no-referrer', // no-referrer, *client
     // body: JSON.stringify(data) // body data type must match "Content-Type" header
   };
-  return fetch(
-    "https://api.clickup.com/api/v2/list/10649956/task?archived=false",
-    config
-  );
+
+  return {
+    config,
+    msg: "Hello World"
+  };
+  //   return fetch(
+  //     "https://api.clickup.com/api/v2/list/10649956/task?archived=false",
+  //     config
+  //   );
 };
 
 exports.handler = async (event, context) => {
