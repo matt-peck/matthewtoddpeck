@@ -27,7 +27,10 @@ exports.handler = async (event, context, callback) => {
 
     console.log("goals fetched!", goals);
 
-    return callback(null, goals);
+    return callback(null, {
+      status: 200,
+      body: goals.data
+    });
   } catch (err) {
     console.log("error", err);
 
