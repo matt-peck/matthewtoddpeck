@@ -29,7 +29,7 @@ exports.handler = async (event, context, callback) => {
 
     return callback(null, {
       status: 200,
-      body: goals.data
+      body: JSON.stringify(goals.data)
     });
   } catch (err) {
     console.log("error", err);
