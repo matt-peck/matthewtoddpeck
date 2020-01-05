@@ -28,17 +28,10 @@ const fetchGoals = () => {
 };
 
 exports.handler = async (event, context) => {
-  try {
-    const goals = { title: "Hello!" };
+  const goals = { title: "Hello!" };
 
-    return {
-      statusCode: 200,
-      body: goals
-    };
-  } catch (err) {
-    return {
-      statusCode: 200,
-      body: err
-    };
-  }
+  return {
+    statusCode: 200,
+    body: JSON.stringify(goals)
+  };
 };
