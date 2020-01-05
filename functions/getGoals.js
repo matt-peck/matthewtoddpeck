@@ -1,8 +1,8 @@
-exports.handler = async event => {
-  const subject = event.queryStringParameters.name || "World";
-  const key = process.env.CU_API_KEY;
+const { CU_API_TOKEN } = process.env;
+
+exports.handler = async (event, context) => {
   return {
     statusCode: 200,
-    body: `Hello ${subject} ${key}!`
+    body: CU_API_TOKEN
   };
 };
