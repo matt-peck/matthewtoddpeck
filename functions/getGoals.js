@@ -27,10 +27,7 @@ exports.handler = async (event, context) => {
 
     console.log("goals fetched!", goals);
 
-    return {
-      statusCode: 200,
-      body: goals
-    };
+    return goals;
   } catch (err) {
     console.log("error", err);
 
