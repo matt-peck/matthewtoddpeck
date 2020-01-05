@@ -20,14 +20,14 @@ const fetchGoals = () => {
   );
 };
 
-exports.handler = async (event, context) => {
+exports.handler = async (event, context, callback) => {
   try {
     console.log("trying fetchGoals()...");
     const goals = await fetchGoals();
 
     console.log("goals fetched!", goals);
 
-    return goals;
+    return callback(null, goals);
   } catch (err) {
     console.log("error", err);
 
