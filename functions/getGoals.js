@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 
 const { CU_API_TOKEN } = process.env;
 
-const fetchGoals = async () => {
+const fetchGoals = () => {
   const config = {
     method: "GET",
     // mode: 'cors', // no-cors, *cors, same-origin
@@ -21,17 +21,24 @@ const fetchGoals = async () => {
     config,
     msg: "Hello World"
   };
-  //   return fetch(
-  //     "https://api.clickup.com/api/v2/list/10649956/task?archived=false",
-  //     config
-  //   );
+  // return fetch(
+  //   "https://api.clickup.com/api/v2/list/10649956/task?archived=false",
+  //   config
+  // );
 };
 
 exports.handler = async (event, context) => {
-  const goals = await fetchGoals();
+  try {
+    const goals = await fetchGoals();
 
-  return {
-    statusCode: 200,
-    body: goals
-  };
+    return {
+      statusCode: 200,
+      body: goals
+    };
+  } catch (err) {
+    return {
+      statusCode: 200,
+      body: err
+    };
+  }
 };
