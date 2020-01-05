@@ -1,3 +1,5 @@
+const fetch = require("node-fetch");
+
 const { CU_API_TOKEN } = process.env;
 
 const fetchGoals = async () => {
