@@ -20,7 +20,7 @@ const fetchGoals = () => {
   return fetch(
     "https://api.clickup.com/api/v2/list/10649956/task?archived=false",
     config
-  );
+  ).then(res => res.json());
 };
 
 exports.handler = async (event, context) => {
@@ -29,7 +29,7 @@ exports.handler = async (event, context) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(goals)
+      body:
     };
   } catch (err) {
     return {
