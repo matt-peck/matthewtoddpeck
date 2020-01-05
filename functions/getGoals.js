@@ -29,7 +29,7 @@ const fetchGoals = () => {
 
 exports.handler = async (event, context) => {
   try {
-    const goals = await fetchGoals();
+    const goals = { title: "Hello!" };
 
     return {
       statusCode: 200,
