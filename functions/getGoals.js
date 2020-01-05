@@ -19,7 +19,7 @@ const fetchGoals = async () => {
   return fetch(
     "https://api.clickup.com/api/v2/list/10649956/task?archived=false",
     config
-  ).then(response => response.json());
+  );
 };
 
 exports.handler = async (event, context) => {
