@@ -9,8 +9,7 @@ const fetchGoals = () => {
     headers: {
       "Content-Type": "application/json",
       Authorization: CU_API_TOKEN
-    },
-    referrerPolicy: "no-referrer" // no-referrer, *client
+    }
   };
 
   return axios.get(
@@ -25,7 +24,7 @@ exports.handler = async (event, context) => {
 
     return {
       statusCode: 200,
-      body: goals
+      body: JSON.stringify(goals)
     };
   } catch (err) {
     return {
