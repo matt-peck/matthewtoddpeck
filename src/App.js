@@ -106,12 +106,17 @@ const ReadingListPage = () => {
   // console.log(formatDate(Number("1577869200000")));
 
   const [readingList, updateReadingList] = useState([]);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     console.log("useEffect called");
+
     fetch("/.netlify/functions/getGoals")
       .then(res => res.json())
-      .then(data => updateReadingList(sortListByStartDate(data.tasks)))
+      .then(data => {
+        updateReadingList(sortListByStartDate(data.tasks));
+        setLoading(false);
+      })
       .catch(err => console.log(err));
   }, []);
 
@@ -136,9 +141,13 @@ const ReadingListPage = () => {
   return (
     <header className="App-header">
       <h1>2020 Reading List</h1>
-      <Styles>
-        <Table columns={columns} data={readingList} />
-      </Styles>
+      {isLoading ? (
+        <div style={{ textAlign: "center" }}>Loading...</div>
+      ) : (
+        <Styles>
+          <Table columns={columns} data={readingList} />
+        </Styles>
+      )}
     </header>
   );
 };
