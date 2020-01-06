@@ -113,7 +113,7 @@ const ReadingListPage = () => {
       .then(res => res.json())
       .then(data => updateReadingList(sortListByStartDate(data.tasks)))
       .catch(err => console.log(err));
-  });
+  }, []);
 
   const columns = React.useMemo(
     () => [
