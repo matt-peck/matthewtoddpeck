@@ -102,31 +102,41 @@ const Table = ({ columns, data }) => {
 };
 
 const ReadingListPage = () => {
-  const [readingList, updateReadingList] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+  const [readingList, updateReadingList] = useState([
+    { title: "", startDate: "", progress: "" },
+    { title: "", startDate: "", progress: "" },
+    { title: "", startDate: "", progress: "" },
+    { title: "", startDate: "", progress: "" },
+    { title: "", startDate: "", progress: "" },
+    { title: "", startDate: "", progress: "" },
+    { title: "", startDate: "", progress: "" },
+    { title: "", startDate: "", progress: "" },
+    { title: "", startDate: "", progress: "" }
+  ]);
+  const [isLoading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetch("/.netlify/functions/getGoals")
-      .then(res => res.json())
-      .then(data => {
-        const formattedTasks = data.tasks.map(t => {
-          const startDate = t.start_date
-            ? formatDate(Number(t.start_date))
-            : "";
-          return {
-            title: t.name,
-            startDate,
-            progress: `${Math.round(
-              t.custom_fields[0].value.percent_complete
-            )}%`
-          };
-        });
-        const sortedReadingList = sortListByStartDate(formattedTasks);
-        updateReadingList(sortedReadingList);
-        setLoading(false);
-      })
-      .catch(err => console.log(err));
-  }, []);
+  // useEffect(() => {
+  //   fetch("/.netlify/functions/getGoals")
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       const formattedTasks = data.tasks.map(t => {
+  //         const startDate = t.start_date
+  //           ? formatDate(Number(t.start_date))
+  //           : "";
+  //         return {
+  //           title: t.name,
+  //           startDate,
+  //           progress: `${Math.round(
+  //             t.custom_fields[0].value.percent_complete
+  //           )}%`
+  //         };
+  //       });
+  //       const sortedReadingList = sortListByStartDate(formattedTasks);
+  //       updateReadingList(sortedReadingList);
+  //       setLoading(false);
+  //     })
+  //     .catch(err => console.log(err));
+  // }, []);
 
   const columns = React.useMemo(
     () => [
@@ -161,6 +171,30 @@ const ReadingListPage = () => {
           <Table columns={columns} data={readingList} />
         </Styles>
       )}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "15px"
+        }}
+      >
+        <span style={{ marginRight: "10px" }}>Powered by my tasks in</span>
+        <a
+          href="https://clickup.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="https://clickup.com/landing/images/logo-clickup_color.svg"
+            alt="clickup"
+            style={{
+              // display: "block",
+              height: "25px"
+            }}
+          />
+        </a>
+      </div>
     </header>
   );
 };
