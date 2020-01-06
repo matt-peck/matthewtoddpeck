@@ -106,8 +106,6 @@ const ReadingListPage = () => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("useEffect called");
-
     fetch("/.netlify/functions/getGoals")
       .then(res => res.json())
       .then(data => {
@@ -118,7 +116,9 @@ const ReadingListPage = () => {
           return {
             title: t.name,
             startDate,
-            progress: Math.round(t.custom_fields[0].value.percent_complete)
+            progress: `${Math.round(
+              t.custom_fields[0].value.percent_complete
+            )}%`
           };
         });
         const sortedReadingList = sortListByStartDate(formattedTasks);
