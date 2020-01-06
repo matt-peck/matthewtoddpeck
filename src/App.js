@@ -7,8 +7,8 @@ const formatDate = date => moment(date).format("MMM D");
 
 const sortListByStartDate = list => {
   return list.sort((a, b) => {
-    const momentA = new moment(a.start_date);
-    const momentB = new moment(b.start_date);
+    const momentA = new moment(a.startDate);
+    const momentB = new moment(b.startDate);
 
     if (momentA.isValid() && momentB.isValid()) {
       return momentA.diff(momentB);
@@ -91,7 +91,6 @@ const Table = ({ columns, data }) => {
           return (
             <tr {...row.getRowProps()}>
               {row.cells.map(cell => {
-                console.log({ cell, props: cell.getCellProps() });
                 return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
               })}
             </tr>
@@ -112,7 +111,18 @@ const ReadingListPage = () => {
     fetch("/.netlify/functions/getGoals")
       .then(res => res.json())
       .then(data => {
-        updateReadingList(sortListByStartDate(data.tasks));
+        const formattedTasks = data.tasks.map(t => {
+          const startDate = t.start_date
+            ? formatDate(Number(t.start_date))
+            : formatDate(t.start_date);
+          return {
+            title: t.name,
+            startDate,
+            progress: t.custom_fields[0].value.percent_complete
+          };
+        });
+        const sortedReadingList = sortListByStartDate(formattedTasks);
+        updateReadingList(sortedReadingList);
         setLoading(false);
       })
       .catch(err => console.log(err));
@@ -126,15 +136,15 @@ const ReadingListPage = () => {
       },
       {
         Header: "Book Title",
-        accessor: "name"
+        accessor: "title"
       },
       {
         Header: "Start Date",
-        accessor: row => row.start_date && formatDate(Number(row.start_date))
+        accessor: "startDate"
       },
       {
         Header: "Progress",
-        accessor: row => row.custom_fields[0].value.percent_complete
+        accessor: "progress"
       }
     ],
     []
