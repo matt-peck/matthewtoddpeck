@@ -144,7 +144,8 @@ const ReadingListPage = () => {
       },
       {
         Header: "Progress",
-        accessor: "progress"
+        accessor: "progress",
+        className: "progress"
       }
     ],
     []
