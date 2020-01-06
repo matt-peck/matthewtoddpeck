@@ -134,7 +134,7 @@ const ReadingListPage = () => {
       },
       {
         Header: "Progress",
-        accessor: row => row.custom_fields[0].value
+        accessor: row => row.custom_fields[0].value.percent_complete
       }
     ],
     []
