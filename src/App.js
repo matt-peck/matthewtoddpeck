@@ -118,7 +118,7 @@ const ReadingListPage = () => {
           return {
             title: t.name,
             startDate,
-            progress: t.custom_fields[0].value.percent_complete
+            progress: Math.round(t.custom_fields[0].value.percent_complete)
           };
         });
         const sortedReadingList = sortListByStartDate(formattedTasks);
