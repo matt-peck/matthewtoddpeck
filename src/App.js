@@ -3,7 +3,7 @@ import moment from "moment";
 import styled from "styled-components";
 import { useTable } from "react-table";
 
-const formatDate = date => moment(Number(date)).format("MMM D");
+const formatDate = date => moment(date).format("MMM D");
 
 const sortListByStartDate = list => {
   return list.sort((a, b) => {
@@ -130,7 +130,11 @@ const ReadingListPage = () => {
       },
       {
         Header: "Start Date",
-        accessor: row => row.start_date && formatDate(row.start_date)
+        accessor: row => row.start_date && formatDate(Number(row.start_date))
+      },
+      {
+        Header: "Progress",
+        accessor: row => row.custom_fields[0].value
       }
     ],
     []
