@@ -1,63 +1,146 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
-import readingList from "./data/readingList.json";
+import styled from "styled-components";
+import { useTable } from "react-table";
 
 const formatDate = date => moment(date).format("MMM D");
 
-const ReadingListItem = props => {
+const sortListByStartDate = list => {
+  return list.sort((a, b) => {
+    const momentA = new moment(a.start_date);
+    const momentB = new moment(b.start_date);
+
+    if (momentA.isValid() && momentB.isValid()) {
+      return momentA.diff(momentB);
+    }
+
+    if (momentA.isValid() && !momentB.isValid()) {
+      return -1;
+    }
+
+    if (!momentA.isValid() && momentB.isValid()) {
+      return 1;
+    }
+
+    if (!momentA.isValid() && !momentB.isValid()) {
+      return 0;
+    }
+  });
+};
+
+const Styles = styled.div`
+  padding: 1rem;
+
+  table {
+    margin: 0 auto;
+    border-spacing: 0;
+    border: 1px solid white;
+
+    tr {
+      :last-child {
+        td {
+          border-bottom: 0;
+        }
+      }
+    }
+
+    th,
+    td {
+      margin: 0;
+      padding: 0.5rem;
+      border-bottom: 1px solid white;
+      border-right: 1px solid white;
+
+      :first-child {
+        text-align: center;
+      }
+
+      :last-child {
+        border-right: 0;
+      }
+    }
+  }
+`;
+
+const Table = ({ columns, data }) => {
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow
+  } = useTable({
+    columns,
+    data
+  });
+
   return (
-    <div className="book">
-      {props.title}
-      {props.start && (
-        <span className="start">Started - {formatDate(props.start)}</span>
-      )}
-    </div>
+    <table {...getTableProps()}>
+      <thead>
+        {headerGroups.map(headerGroup => (
+          <tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map(column => (
+              <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+            ))}
+          </tr>
+        ))}
+      </thead>
+      <tbody {...getTableBodyProps()}>
+        {rows.map((row, i) => {
+          prepareRow(row);
+          return (
+            <tr {...row.getRowProps()}>
+              {row.cells.map(cell => {
+                console.log({ cell, props: cell.getCellProps() });
+                return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+              })}
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 };
 
-class App extends Component {
-  async componentDidMount() {
-    const goals = await fetch("./.netlify/functions/getGoals").then(response =>
-      response.json()
-    );
-    console.log({ goals });
-  }
+const ReadingListPage = () => {
+  // console.log(formatDate(Number("1577869200000")));
 
-  render() {
-    const sortedReadingList = readingList.sort((a, b) => {
-      const momentA = new moment(a.start);
-      const momentB = new moment(b.start);
+  const [readingList, updateReadingList] = useState([]);
 
-      if (momentA.isValid() && momentB.isValid()) {
-        return momentA.diff(momentB);
+  useEffect(() => {
+    console.log("useEffect called");
+    fetch("/.netlify/functions/getGoals")
+      .then(res => res.json())
+      .then(data => updateReadingList(sortListByStartDate(data.tasks)))
+      .catch(err => console.log(err));
+  });
+
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "#",
+        accessor: (row, rowIndex) => rowIndex + 1
+      },
+      {
+        Header: "Book Title",
+        accessor: "name"
+      },
+      {
+        Header: "Start Date",
+        accessor: row => row.start_date && formatDate(row.start_date)
       }
+    ],
+    []
+  );
 
-      if (momentA.isValid() && !momentB.isValid()) {
-        return -1;
-      }
+  return (
+    <header className="App-header">
+      <h1>2020 Reading List</h1>
+      <Styles>
+        <Table columns={columns} data={readingList} />
+      </Styles>
+    </header>
+  );
+};
 
-      if (!momentA.isValid() && momentB.isValid()) {
-        return 1;
-      }
-
-      if (!momentA.isValid() && !momentB.isValid()) {
-        return 0;
-      }
-    });
-
-    return (
-      <header className="App-header">
-        <h1>2020 Reading List</h1>
-        {sortedReadingList.map(item => (
-          <ReadingListItem
-            key={item.title}
-            title={item.title}
-            start={item.start}
-          />
-        ))}
-      </header>
-    );
-  }
-}
-
-export default App;
+export default ReadingListPage;
