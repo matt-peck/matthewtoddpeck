@@ -3,7 +3,7 @@ import moment from "moment";
 import styled from "styled-components";
 import { useTable } from "react-table";
 
-const formatDate = date => moment(date).format("MMM D");
+const formatDate = date => moment(Number(date)).format("MMM D");
 
 const sortListByStartDate = list => {
   return list.sort((a, b) => {
@@ -103,8 +103,6 @@ const Table = ({ columns, data }) => {
 };
 
 const ReadingListPage = () => {
-  // console.log(formatDate(Number("1577869200000")));
-
   const [readingList, updateReadingList] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
