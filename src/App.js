@@ -177,7 +177,8 @@ const ReadingListPage = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          marginTop: "15px"
+          marginTop: "15px",
+          marginBottom: "25px"
         }}
       >
         <span style={{ marginRight: "10px" }}>Powered by my tasks in</span>
