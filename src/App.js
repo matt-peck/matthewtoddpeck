@@ -102,7 +102,7 @@ const Table = ({ columns, data }) => {
 };
 
 const ReadingListPage = () => {
-  const [readingList, updateReadingList] = useState([
+  const mockData = [
     { title: "", startDate: "", progress: "" },
     { title: "", startDate: "", progress: "" },
     { title: "", startDate: "", progress: "" },
@@ -112,31 +112,32 @@ const ReadingListPage = () => {
     { title: "", startDate: "", progress: "" },
     { title: "", startDate: "", progress: "" },
     { title: "", startDate: "", progress: "" }
-  ]);
-  const [isLoading, setLoading] = useState(false);
+  ];
+  const [readingList, updateReadingList] = useState([]);
+  const [isLoading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   fetch("/.netlify/functions/getGoals")
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       const formattedTasks = data.tasks.map(t => {
-  //         const startDate = t.start_date
-  //           ? formatDate(Number(t.start_date))
-  //           : "";
-  //         return {
-  //           title: t.name,
-  //           startDate,
-  //           progress: `${Math.round(
-  //             t.custom_fields[0].value.percent_complete
-  //           )}%`
-  //         };
-  //       });
-  //       const sortedReadingList = sortListByStartDate(formattedTasks);
-  //       updateReadingList(sortedReadingList);
-  //       setLoading(false);
-  //     })
-  //     .catch(err => console.log(err));
-  // }, []);
+  useEffect(() => {
+    fetch("/.netlify/functions/getGoals")
+      .then(res => res.json())
+      .then(data => {
+        const formattedTasks = data.tasks.map(t => {
+          const startDate = t.start_date
+            ? formatDate(Number(t.start_date))
+            : "";
+          return {
+            title: t.name,
+            startDate,
+            progress: `${Math.round(
+              t.custom_fields[0].value.percent_complete
+            )}%`
+          };
+        });
+        const sortedReadingList = sortListByStartDate(formattedTasks);
+        updateReadingList(sortedReadingList);
+        setLoading(false);
+      })
+      .catch(err => console.log(err));
+  }, []);
 
   const columns = React.useMemo(
     () => [
@@ -189,8 +190,7 @@ const ReadingListPage = () => {
             src="https://clickup.com/landing/images/logo-clickup_color.svg"
             alt="clickup"
             style={{
-              // display: "block",
-              height: "25px"
+              height: "22px"
             }}
           />
         </a>
