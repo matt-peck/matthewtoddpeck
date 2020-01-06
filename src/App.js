@@ -114,7 +114,7 @@ const ReadingListPage = () => {
         const formattedTasks = data.tasks.map(t => {
           const startDate = t.start_date
             ? formatDate(Number(t.start_date))
-            : formatDate(t.start_date);
+            : "";
           return {
             title: t.name,
             startDate,
