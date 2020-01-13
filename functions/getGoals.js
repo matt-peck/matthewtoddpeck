@@ -20,13 +20,19 @@ const fetchGoals = () => {
 
 exports.handler = async (event, context, callback) => {
   try {
+    console.log("fetching goals...");
     const goals = await fetchGoals();
+    console.log("goals fetched!");
 
-    return callback(null, {
-      status: 200,
+    return {
+      statusCode: 200,
       body: JSON.stringify(goals.data)
-    });
+    };
   } catch (err) {
-    return callback(err);
+    console.log("error fetching goals", err);
+    return {
+      statusCode: 400,
+      body: "something happened wrong"
+    };
   }
 };
