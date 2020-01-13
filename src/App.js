@@ -75,7 +75,13 @@ const Table = ({ columns, data }) => {
   });
 
   return (
-    <table {...getTableProps()}>
+    <table
+      {...getTableProps()}
+      style={{
+        backgroundColor: "#00000040",
+        boxShadow: "1px 1px 10px 1px #daa52078"
+      }}
+    >
       <thead>
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()}>
