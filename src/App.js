@@ -156,7 +156,32 @@ const ReadingListPage = () => {
       {
         Header: "Progress",
         accessor: "progress",
-        className: "progress"
+        className: "progress",
+        Cell: data => {
+          console.log({ data });
+          return (
+            <div
+              style={{
+                backgroundColor: "darkslategray",
+                height: "15px",
+                borderRadius: "10px"
+              }}
+            >
+              <div
+                style={{
+                  height: "100%",
+                  width: data.row.original.progress,
+                  borderRadius: `10px ${
+                    data.row.original.progress === "100%"
+                      ? "10px 10px"
+                      : "0px 0px"
+                  } 10px`,
+                  backgroundColor: "goldenrod"
+                }}
+              ></div>
+            </div>
+          );
+        }
       }
     ],
     []
@@ -186,6 +211,11 @@ const ReadingListPage = () => {
           href="https://clickup.com/"
           target="_blank"
           rel="noopener noreferrer"
+          style={{
+            backgroundColor: "white",
+            padding: "7px 7px 5px 7px",
+            borderRadius: "5px"
+          }}
         >
           <img
             src="https://clickup.com/landing/images/logo-clickup_color.svg"
