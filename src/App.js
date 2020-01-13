@@ -4,6 +4,12 @@ import styled from "styled-components";
 import { useTable } from "react-table";
 
 const formatDate = date => moment(date).format("MMM D");
+const formatToProperCase = string => {
+  return string
+    .split(" ")
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+};
 
 const sortListByStartDate = list => {
   return list.sort((a, b) => {
@@ -108,17 +114,6 @@ const Table = ({ columns, data }) => {
 };
 
 const ReadingListPage = () => {
-  const mockData = [
-    { title: "", startDate: "", progress: "" },
-    { title: "", startDate: "", progress: "" },
-    { title: "", startDate: "", progress: "" },
-    { title: "", startDate: "", progress: "" },
-    { title: "", startDate: "", progress: "" },
-    { title: "", startDate: "", progress: "" },
-    { title: "", startDate: "", progress: "" },
-    { title: "", startDate: "", progress: "" },
-    { title: "", startDate: "", progress: "" }
-  ];
   const [readingList, updateReadingList] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
@@ -133,6 +128,7 @@ const ReadingListPage = () => {
           return {
             title: t.name,
             startDate,
+            status: formatToProperCase(t.status.status),
             progress: `${Math.round(
               t.custom_fields[0].value.percent_complete
             )}%`
@@ -156,15 +152,17 @@ const ReadingListPage = () => {
         accessor: "title"
       },
       {
-        Header: "Start Date",
-        accessor: "startDate"
+        Header: "Status",
+        accessor: "status",
+        style: {
+          textAlign: "center"
+        }
       },
       {
         Header: "Progress",
         accessor: "progress",
         className: "progress",
         Cell: data => {
-          console.log({ data });
           return (
             <div
               style={{
