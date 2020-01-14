@@ -196,7 +196,7 @@ const ReadingListPage = () => {
         }
       },
       {
-        Header: "Rating",
+        Header: "Helpfulness",
         accessor: "rating",
         Cell: data => {
           const offsetRatingIndex = data.row.original.rating - 1;
