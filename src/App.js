@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import styled from "styled-components";
 import { useTable } from "react-table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
 
 const formatDate = date => moment(date).format("MMM D");
 const formatToProperCase = string => {
@@ -125,13 +127,20 @@ const ReadingListPage = () => {
           const startDate = t.start_date
             ? formatDate(Number(t.start_date))
             : "";
+          const progress = `${Math.round(
+            t.custom_fields.find(f => f.name === "Progress").value
+              .percent_complete
+          )}%`;
+          const rating = t.custom_fields.find(f => f.name === "Rating").value
+            ? Number(t.custom_fields.find(f => f.name === "Rating").value)
+            : 0;
+
           return {
             title: t.name,
             startDate,
-            status: formatToProperCase(t.status.status),
-            progress: `${Math.round(
-              t.custom_fields[0].value.percent_complete
-            )}%`
+            rating,
+            progress,
+            status: formatToProperCase(t.status.status)
           };
         });
         const sortedReadingList = sortListByStartDate(formattedTasks);
@@ -161,7 +170,6 @@ const ReadingListPage = () => {
       {
         Header: "Progress",
         accessor: "progress",
-        className: "progress",
         Cell: data => {
           return (
             <div
@@ -183,6 +191,31 @@ const ReadingListPage = () => {
                   backgroundColor: "goldenrod"
                 }}
               ></div>
+            </div>
+          );
+        }
+      },
+      {
+        Header: "Rating",
+        accessor: "rating",
+        Cell: data => {
+          const offsetRatingIndex = data.row.original.rating - 1;
+          const defaultRatings = [false, false, false, false, false];
+          const ratedRatings = defaultRatings.map(
+            (val, i) => i >= offsetRatingIndex
+          );
+
+          return (
+            <div>
+              {ratedRatings.map(isLightOn => (
+                <FontAwesomeIcon
+                  style={{
+                    color: !isLightOn ? "goldenrod" : "#2f4e4f",
+                    marginRight: "5px"
+                  }}
+                  icon={faLightbulb}
+                />
+              ))}
             </div>
           );
         }
