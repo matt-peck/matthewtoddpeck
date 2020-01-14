@@ -202,7 +202,7 @@ const ReadingListPage = () => {
           const offsetRatingIndex = data.row.original.rating - 1;
           const defaultRatings = [false, false, false, false, false];
           const ratedRatings = defaultRatings.map(
-            (val, i) => i >= offsetRatingIndex
+            (val, i) => i > offsetRatingIndex
           );
 
           return (
