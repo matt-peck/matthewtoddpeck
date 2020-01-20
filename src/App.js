@@ -3,7 +3,10 @@ import moment from "moment";
 import styled from "styled-components";
 import { useTable } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLightbulb } from "@fortawesome/free-solid-svg-icons";
+import { faLightbulb, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import Toggle from "react-toggle";
+import COLORS from "./colors";
+import "react-toggle/style.css";
 
 const formatDate = date => moment(date).format("MMM D");
 const formatToProperCase = string => {
@@ -70,7 +73,7 @@ const Styles = styled.div`
   }
 `;
 
-const Table = ({ columns, data }) => {
+const Table = ({ columns, data, theme }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -82,19 +85,20 @@ const Table = ({ columns, data }) => {
     data
   });
 
+  const borderColor = COLORS[theme].tableOutline;
+
   return (
-    <table
-      {...getTableProps()}
-      style={{
-        backgroundColor: "#00000040",
-        boxShadow: "1px 1px 10px 1px #daa52078"
-      }}
-    >
+    <table {...getTableProps()} style={{ borderColor: borderColor }}>
       <thead>
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+              <th
+                {...column.getHeaderProps()}
+                style={{ borderColor: borderColor }}
+              >
+                {column.render("Header")}
+              </th>
             ))}
           </tr>
         ))}
@@ -105,7 +109,14 @@ const Table = ({ columns, data }) => {
           return (
             <tr {...row.getRowProps()}>
               {row.cells.map(cell => {
-                return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+                return (
+                  <td
+                    {...cell.getCellProps()}
+                    style={{ borderColor: borderColor }}
+                  >
+                    {cell.render("Cell")}
+                  </td>
+                );
               })}
             </tr>
           );
@@ -118,6 +129,7 @@ const Table = ({ columns, data }) => {
 const ReadingListPage = () => {
   const [readingList, updateReadingList] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [darkThemeToggled, toggleTheme] = useState(true);
 
   useEffect(() => {
     fetch("/.netlify/functions/getGoals")
@@ -207,8 +219,9 @@ const ReadingListPage = () => {
 
           return (
             <div>
-              {ratedRatings.map(isLightOn => (
+              {ratedRatings.map((isLightOn, i) => (
                 <FontAwesomeIcon
+                  key={i}
                   style={{
                     color: !isLightOn ? "goldenrod" : "#2f4e4f",
                     marginRight: "5px"
@@ -224,46 +237,105 @@ const ReadingListPage = () => {
     []
   );
 
+  const activeTheme = darkThemeToggled ? "dark" : "light";
+
   return (
-    <header className="App-header">
-      <h1>2020 Reading List</h1>
-      {isLoading ? (
-        <div style={{ textAlign: "center" }}>Loading...</div>
-      ) : (
-        <Styles>
-          <Table columns={columns} data={readingList} />
-        </Styles>
-      )}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "15px",
-          marginBottom: "25px"
-        }}
-      >
-        <span style={{ marginRight: "10px" }}>Powered by my tasks in</span>
-        <a
-          href="https://clickup.com/"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div
+      className="app-container"
+      style={{
+        color: COLORS[activeTheme].primaryFont,
+        backgroundColor: COLORS[activeTheme].primaryBackground
+      }}
+    >
+      <header className="App-header">
+        <h1>2020 Reading List</h1>
+        <div
           style={{
-            backgroundColor: "white",
-            padding: "7px 7px 5px 7px",
-            borderRadius: "5px"
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "15px"
           }}
         >
-          <img
-            src="https://clickup.com/landing/images/logo-clickup_color.svg"
-            alt="clickup"
-            style={{
-              height: "22px"
+          <Toggle
+            checked={darkThemeToggled}
+            icons={{
+              checked: (
+                <div
+                  style={{
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center"
+                  }}
+                >
+                  <FontAwesomeIcon
+                    style={{
+                      color: "white"
+                    }}
+                    icon={faMoon}
+                  />
+                </div>
+              ),
+              unchecked: (
+                <div
+                  style={{
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center"
+                  }}
+                >
+                  <FontAwesomeIcon
+                    style={{
+                      color: "goldenrod"
+                    }}
+                    icon={faSun}
+                  />
+                </div>
+              )
+            }}
+            onChange={e => {
+              // console.log("changed", e.target.checked);
+              toggleTheme(!darkThemeToggled);
             }}
           />
-        </a>
-      </div>
-    </header>
+        </div>
+
+        {isLoading ? (
+          <div style={{ textAlign: "center" }}>Loading...</div>
+        ) : (
+          <Styles>
+            <Table columns={columns} data={readingList} theme={activeTheme} />
+          </Styles>
+        )}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "15px"
+          }}
+        >
+          <span style={{ marginRight: "10px" }}>Powered by my tasks in</span>
+          <a
+            href="https://clickup.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              backgroundColor: "white",
+              padding: "7px 7px 5px 7px",
+              borderRadius: "5px"
+            }}
+          >
+            <img
+              src="https://clickup.com/landing/images/logo-clickup_color.svg"
+              alt="clickup"
+              style={{
+                height: "22px"
+              }}
+            />
+          </a>
+        </div>
+      </header>
+    </div>
   );
 };
 

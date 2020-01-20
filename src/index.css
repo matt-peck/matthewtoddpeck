@@ -1,28 +1,32 @@
-html {
-  background-color: #282c34;
-  color: white;
-  width: 100%;
+html,
+body {
   height: 100%;
-  font-size: 16px;
+  background-color: #282c34;
 }
 
 body {
-  margin: 0;
-  width: 100%;
-  height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 16px;
 }
 
-header {
+#root {
   height: 100%;
+  background-color: "#282c34";
+}
+
+.app-container {
+  /* height: 100%; */
+  padding-top: 35px;
+  padding-bottom: 20px;
 }
 
 h1 {
+  margin: 0;
+  margin-bottom: 25px;
+  padding: 0;
   text-align: center;
 }
 
@@ -37,3 +41,7 @@ h1 {
   font-size: 0.9rem;
   font-style: italic;
 }
+
+/* .react-toggle--checked .react-toggle-track {
+  background-color: #ab199f;
+} */
