@@ -17,6 +17,7 @@ const formatToProperCase = string => {
 };
 
 const sortListByStartDate = list => {
+  console.log("hello");
   return list.sort((a, b) => {
     const momentA = new moment(a.startDate);
     const momentB = new moment(b.startDate);
